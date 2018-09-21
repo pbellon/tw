@@ -2,6 +2,7 @@ import argparse
 
 from lib import config
 from lib import api
+from lib import utils
 
 class App:
     description = config.DESCRIPTION
@@ -23,27 +24,26 @@ class App:
 
     def init_commands(self):
         self.commands = {
-            key: {
+            key: utils.as_obj({
                 "help": help, "action": executable
-            } for [ key, help, executable ] in self.list_api_methods()
+            }) for [ key, help, executable ] in self.list_api_methods()
         }
 
         for key, command in self.commands.items():
-            self.parser.add_argument(
-                "--%s" % key,
-                action='store_const',
-                dest='command',
-                const=key,
-                help=command["help"])
+            self.parser.add_argument("--%s" % key, const=key,
+                dest='command', action='store_const', help=command.help)
+
+    def parse_args(self): return self.parser.parse_args()
+    def help(self): self.parser.print_help()
 
     def run(self):
-        parser = self.parser
-        args = parser.parse_args()
-        self.call(args.command) if args.command else parser.print_help()
-
-    def call(self, command_key):
-        command = self.commands[command_key]
-        result = command['action']()
-        print(result.as_json())
+        args = self.parse_args()
+        if args.command:
+            command = self.commands[args.command]
+            print(
+                command.action().as_json()
+            )
+        else:
+            self.help()
 
 if __name__ == "__main__": App()
