@@ -1,7 +1,6 @@
 import twitter
 import json
-import env
-
+from . import env
 
 class TwitterApiResult:
     def __init__(self, tweets):

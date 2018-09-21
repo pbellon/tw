@@ -1,18 +1,22 @@
 import argparse
-import utils
-import api
+
+from lib import config
+from lib import api
 
 class App:
-    description = utils.config.DESCRIPTION
+    description = config.DESCRIPTION
     def __init__(self):
-        self.init_parser()
+        self.init_argparser()
         self.init_api()
         self.init_commands()
         self.run()
 
-    def init_parser(self): self.parser = argparse.ArgumentParser(description=self.description)
+    def init_argparser(self):
+        self.parser = argparse.ArgumentParser(
+            description=self.description)
 
-    def init_api(self): self.api = api.init()
+    def init_api(self):
+        self.api = api.init()
 
     def init_commands(self):
         self.commands = {}
@@ -30,17 +34,14 @@ class App:
                 action='store_const',
                 dest='command',
                 const=key,
-                help=command["help"]
-            )
+                help=command["help"])
 
     def run(self):
-        args = self.parser.parse_args()
-        if args.command:
-            self.call_command_action(args.command)
-        else:
-            self.parser.print_help()
+        parser = self.parser
+        args = parser.parse_args()
+        self.call(args.command) if args.command else parser.print_help()
 
-    def call_command_action(self, command_key):
+    def call(self, command_key):
         command = self.commands[command_key]
         result = command['action']()
         print(result.as_json())
