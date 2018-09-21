@@ -1,4 +1,4 @@
-# getTweets.py
+# tw.py
 ## Requirements
 ```
 Python >= 3.5
