@@ -14,11 +14,10 @@ pip install -r requirement.txt
 
 ## Configuration
 ```sh
+cd lib/
 mv env.sample.py env.py
 ```
 Then edit env.py to add the proper key & secrets. To obtain them visit [twitter apps][apps] and create an app if necessary.
-
-[apps]: https://apps.twitter.com/
 
 ## Usage
 ```
@@ -36,3 +35,5 @@ Exemple:
 ```sh
 $> py tw.py --retweets > my_latest_retweets.json
 ```
+
+[apps]: https://apps.twitter.com/
