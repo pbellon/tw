@@ -9,4 +9,4 @@ __CONFIG = {
    "DESCRIPTION":'Small utility to retrieve tweets as JSON from twitter api.'
 }
 
-def config(): return as_obj(__CONFIG)
+config = as_obj(__CONFIG)

@@ -3,7 +3,7 @@ import utils
 import api
 
 class App:
-    description = utils.config().DESCRIPTION
+    description = utils.config.DESCRIPTION
     def __init__(self):
         self.init_parser()
         self.init_api()
