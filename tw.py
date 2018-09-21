@@ -18,15 +18,15 @@ class App:
     def init_api(self):
         self.api = api.init()
 
-    def init_commands(self):
-        self.commands = {}
+    def list_api_methods(self):
+        return self.api.list_methods()
 
-        for method in self.api.list_methods():
-            [ key, help, executable ] = method
-            self.commands[key] = {
-                "help": help,
-                "action": executable
-            }
+    def init_commands(self):
+        self.commands = {
+            key: {
+                "help": help, "action": executable
+            } for [ key, help, executable ] in self.list_api_methods()
+        }
 
         for key, command in self.commands.items():
             self.parser.add_argument(
