@@ -7,31 +7,25 @@ from lib import utils
 class App:
     description = config.DESCRIPTION
     def __init__(self):
-        self.init_argparser()
-        self.init_api()
-        self.init_commands()
-        self.run()
-
-    def init_argparser(self):
         self.parser = argparse.ArgumentParser(
             description=self.description)
-
-    def init_api(self):
         self.api = api.init()
+        self.commands = self.init_commands()
+        self.run()
 
-    def list_api_methods(self):
-        return self.api.list_methods()
-
-    def init_commands(self):
-        self.commands = {
+    def list_methods(self):
+        return {
             key: utils.as_obj({
                 "help": help, "action": executable
-            }) for [ key, help, executable ] in self.list_api_methods()
+            }) for [ key, help, executable ] in self.api.list_methods()
         }
 
-        for key, command in self.commands.items():
+    def init_commands(self):
+        methods = self.list_methods()
+        for key, method in methods.items():
             self.parser.add_argument("--%s" % key, const=key,
-                dest='command', action='store_const', help=command.help)
+                dest='command', action='store_const', help=method.help)
+        return methods
 
     def run(self):
         args = self.parser.parse_args()
