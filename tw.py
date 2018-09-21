@@ -33,17 +33,14 @@ class App:
             self.parser.add_argument("--%s" % key, const=key,
                 dest='command', action='store_const', help=command.help)
 
-    def parse_args(self): return self.parser.parse_args()
-    def help(self): self.parser.print_help()
-
     def run(self):
-        args = self.parse_args()
+        args = self.parser.parse_args()
         if args.command:
             command = self.commands[args.command]
             print(
                 command.action().as_json()
             )
         else:
-            self.help()
+            self.parser.help()
 
 if __name__ == "__main__": App()
