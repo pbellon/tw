@@ -1,5 +1,3 @@
-
-import ipdb
 import twitter
 import json
 import env
